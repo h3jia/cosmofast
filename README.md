@@ -10,13 +10,14 @@ which provides several frequently-used cosmological modules.
 
 CosmoFast is distributed under the Apache License, Version 2.0.
 
-## Citing BayesFast
+## Citing CosmoFast
 
 If you find CosmoFast useful for your research,
 please consider citing our papers accordingly:
 
-* He Jia and Uros Seljak, *BayesFast: Boosting Posterior Analysis
-with Polynomial Surrogate Models*, in prep (for posterior sampling)
+* He Jia and Uros Seljak, *BayesFast: A Fast and Scalable Method for 
+Cosmological Bayesian Inference*, in prep (for posterior sampling)
 * He Jia and Uros Seljak, *Normalizing Constant Estimation
 with Optimal Bridge Sampling and Normalizing Flows*,
-in prep (for evidence estimation)
+accepted by [AABI 2019](http://www.approximateinference.org/) 
+(for evidence estimation)
