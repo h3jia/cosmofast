@@ -8,5 +8,13 @@ ext_modules = []
 setup(
     name='cosmofast',
     version='0.1.0dev1',
-    ext_modules=cythonize(ext_modules, language_level = "3"),
+    author='He Jia and Uros Seljak',
+    maintainer='He Jia',
+    maintainer_email='he.jia.phy@gmail.com',
+    description='Cosmology add-ons for the BayesFast package.',
+    url='https://github.com/HerculesJack/cosmofast',
+    license='Apache License, Version 2.0',
+    python_requires=">=3",
+    install_requires=['astropy', 'cython', 'numpy', 'scipy'],
+    ext_modules=cythonize(ext_modules, language_level="3"),
 )
