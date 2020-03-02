@@ -3,6 +3,7 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 import numpy as np
 
+
 ext_modules = []
 
 setup(
@@ -15,6 +16,6 @@ setup(
     url='https://github.com/HerculesJack/cosmofast',
     license='Apache License, Version 2.0',
     python_requires=">=3",
-    install_requires=['astropy', 'cython', 'numpy', 'scipy'],
+    install_requires=['astropy', 'bayesfast', 'cython', 'numpy', 'scipy'],
     ext_modules=cythonize(ext_modules, language_level="3"),
 )

@@ -7,8 +7,8 @@ from libc.stdlib cimport malloc, free
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _get_binned_cls(const double[::1] cls, double[::1] cls_b, 
-                    const double[::1] weight, const int[::1] bin_m, 
+def _get_binned_cls(const double[::1] cls, double[::1] cls_b,
+                    const double[::1] weight, const int[::1] bin_m,
                     const int[::1] bin_w, const size_t n_bin):
     cdef size_t i, j
     for i in range(n_bin):
@@ -20,8 +20,8 @@ def _get_binned_cls(const double[::1] cls, double[::1] cls_b,
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _plik_lite_f(const double[::1] cls_diag, const double ap, 
-                 double[::1] out_f, const double[::1] X_data_diag, 
+def _plik_lite_f(const double[::1] cls_diag, const double ap,
+                 double[::1] out_f, const double[::1] X_data_diag,
                  const size_t n_bin):
     cdef double tmp
     cdef double ap2 = ap * ap
@@ -37,8 +37,8 @@ def _plik_lite_f(const double[::1] cls_diag, const double ap,
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _plik_lite_j(const double[::1] cls_diag, const double ap, 
-                 double[:, ::1] out_j, const double[::1] X_data_diag, 
+def _plik_lite_j(const double[::1] cls_diag, const double ap,
+                 double[:, ::1] out_j, const double[::1] X_data_diag,
                  const size_t n_bin):
     cdef double ap2 = ap * ap
     cdef size_t i
@@ -49,13 +49,13 @@ def _plik_lite_j(const double[::1] cls_diag, const double ap,
     for i in range(n_bin):
         out_j[0, i] /= ap2
         out_j[0, n_bin] -= 2 * cls_diag[i] / ap * out_j[0, i]
-        
+
 
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _plik_lite_fj(const double[::1] cls_diag, const double ap, 
-                  double[::1] out_f, double[:, ::1] out_j, 
+def _plik_lite_fj(const double[::1] cls_diag, const double ap,
+                  double[::1] out_f, double[:, ::1] out_j,
                   const double[::1] X_data_diag, const size_t n_bin):
     cdef double ap2 = ap * ap
     cdef size_t i
@@ -69,4 +69,3 @@ def _plik_lite_fj(const double[::1] cls_diag, const double ap,
     for i in range(n_bin):
         out_j[0, i] /= ap2
         out_j[0, n_bin] -= 2 * cls_diag[i] / ap * out_j[0, i]
-        

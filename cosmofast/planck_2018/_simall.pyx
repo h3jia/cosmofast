@@ -19,13 +19,13 @@ cdef inline double _evaluate(const double* c, double x) nogil:
 @cython.cdivision(True)
 cdef inline double _derivative(const double* c, double x) nogil:
     return 3 * c[0] * x * x + 2 * c[1] * x + c[2]
-    
+
 
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _simall_f(const double[::1] cls, const double ap, double[::1] out_f, 
-              const double[:, :, ::1] c, const double step, const size_t n_step, 
+def _simall_f(const double[::1] cls, const double ap, double[::1] out_f,
+              const double[:, :, ::1] c, const double step, const size_t n_step,
               size_t lmin=2, size_t lmax=29):
     cdef double power, tmp
     cdef double ap2 = ap * ap
@@ -46,8 +46,8 @@ def _simall_f(const double[::1] cls, const double ap, double[::1] out_f,
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _simall_j(const double[::1] cls, const double ap, double[:, ::1] out_j, 
-              const double[:, :, ::1] c, const double step, const size_t n_step, 
+def _simall_j(const double[::1] cls, const double ap, double[:, ::1] out_j,
+              const double[:, :, ::1] c, const double step, const size_t n_step,
               size_t lmin=2, size_t lmax=29):
     cdef double power, tmp
     cdef double ap2 = ap * ap
@@ -70,9 +70,9 @@ def _simall_j(const double[::1] cls, const double ap, double[:, ::1] out_j,
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _simall_fj(const double[::1] cls, const double ap, double[::1] out_f, 
-               double[:, ::1] out_j, const double[:, :, ::1] c, 
-               const double step, const size_t n_step, size_t lmin=2, 
+def _simall_fj(const double[::1] cls, const double ap, double[::1] out_f,
+               double[:, ::1] out_j, const double[:, :, ::1] c,
+               const double step, const size_t n_step, size_t lmin=2,
                size_t lmax=29):
     cdef double power
     cdef double ap2 = ap * ap
@@ -93,4 +93,3 @@ def _simall_fj(const double[::1] cls, const double ap, double[::1] out_f,
         out_f[0] += _evaluate(&c[i, k, 0], power - k * step)
         out_j[0, i] = _derivative(&c[i, k, 0], power - k * step) * tmp
         out_j[0, n_l] -= 2 * cls[i] / ap * out_j[0, i]
-        
