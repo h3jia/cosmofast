@@ -6,6 +6,23 @@ developed by [He Jia](http://hejia.io) and
 [Uros Seljak](https://physics.berkeley.edu/people/faculty/uros-seljak),
 which provides several frequently-used cosmological modules.
 
+## Installation
+
+We plan to add pypi and conda-forge support later. For now, please first install
+[BayesFast](https://github.com/HerculesJack/bayesfast),
+and then install CosmoFast from source with:
+
+```
+git clone https://github.com/HerculesJack/cosmofast
+cd cosmofast
+pip install -e .
+```
+
+## Dependencies
+
+CosmoFast depends on astropy, bayesfast, cython, numpy and scipy.
+Currently, it is only tested on Linux with Python 3.6.
+
 ## License
 
 CosmoFast is distributed under the Apache License, Version 2.0.

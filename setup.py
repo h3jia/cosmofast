@@ -4,7 +4,40 @@ from Cython.Build import cythonize
 import numpy as np
 
 
-ext_modules = []
+ext_modules = [
+    Extension(
+        "cosmofast.planck_2018._commander",
+        ["cosmofast/planck_2018/_commander.pyx"],
+        include_dirs=[np.get_include()],
+        # extra_compile_args=['-fopenmp'],
+        # extra_link_args=['-fopenmp'],
+        libraries=["m"],
+    ),
+    Extension(
+        "cosmofast.planck_2018._plik_lite",
+        ["cosmofast/planck_2018/_plik_lite.pyx"],
+        include_dirs=[np.get_include()],
+        # extra_compile_args=['-fopenmp'],
+        # extra_link_args=['-fopenmp'],
+        # libraries=["m"],
+    ),
+    Extension(
+        "cosmofast.planck_2018._simall",
+        ["cosmofast/planck_2018/_simall.pyx"],
+        include_dirs=[np.get_include()],
+        # extra_compile_args=['-fopenmp'],
+        # extra_link_args=['-fopenmp'],
+        libraries=["m"],
+    ),
+    Extension(
+        "cosmofast.planck_2018._smica",
+        ["cosmofast/planck_2018/_smica.pyx"],
+        include_dirs=[np.get_include()],
+        # extra_compile_args=['-fopenmp'],
+        # extra_link_args=['-fopenmp'],
+        libraries=["m"],
+    ),
+]
 
 setup(
     name='cosmofast',
