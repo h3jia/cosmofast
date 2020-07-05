@@ -7,6 +7,12 @@ __pycache__/
 *.c
 *.so
 
+# legacy data
+legacy-*/
+
+# notebooks for testing
+test-cosmofast*.ipynb
+
 # Distribution / packaging
 .Python
 build/
