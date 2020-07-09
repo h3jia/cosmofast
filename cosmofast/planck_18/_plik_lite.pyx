@@ -1,7 +1,7 @@
 cimport cython
 from libc.stdlib cimport malloc, free
-#from libc.math cimport log
-#from cython.parallel import prange
+# from libc.math cimport log
+# from cython.parallel import prange
 
 __all__ = ['_get_binned_cls', '_plik_lite_f', '_plik_lite_j', '_plik_lite_fj']
 

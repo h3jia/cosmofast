@@ -1,6 +1,6 @@
 cimport cython
 from libc.stdlib cimport malloc, free
-from libc.math cimport log, pi
+from libc.math cimport pi
 cdef extern from "numpy/npy_math.h":
     double nan "NPY_NAN"
 import numpy as np
@@ -17,14 +17,14 @@ __all__ = ['_simall_f', '_simall_j', '_simall_fj']
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-cdef inline double _evaluate(const double* c, double x) nogil:
+cdef inline double _evaluate(const double* c, const double x) nogil:
     return c[0] * x * x * x + c[1] * x * x + c[2] * x + c[3]
 
 
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-cdef inline double _derivative(const double* c, double x) nogil:
+cdef inline double _derivative(const double* c, const double x) nogil:
     return 3 * c[0] * x * x + 2 * c[1] * x + c[2]
 
 

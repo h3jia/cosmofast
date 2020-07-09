@@ -77,7 +77,7 @@ cdef void _mat_vec(const double[:, ::1] A, const double* x, double* Ax,
 @cython.cdivision(True)
 cdef int _cubic_01(const double xval, const double* x_s, const double* y_s,
                    const double* y2_s, double* y0, double* y1,
-                   int n_b) nogil:
+                   const int n_b) nogil:
     cdef int i
     cdef double a, b, h
     i = _find_interval(x_s, n_b, xval)
@@ -99,7 +99,7 @@ cdef int _cubic_01(const double xval, const double* x_s, const double* y_s,
 @cython.cdivision(True)
 cdef int _cubic_012(const double xval, const double* x_s, const double* y_s,
                     const double* y2_s, double* y0, double* y1, double* y2,
-                    int n_b) nogil:
+                    const int n_b) nogil:
     cdef int i
     cdef double a, b, h
     i = _find_interval(x_s, n_b, xval)
