@@ -8,10 +8,10 @@ __pycache__/
 *.so
 
 # legacy data
-legacy-*/
+# legacy-*/
 
 # notebooks for testing
-test-cosmofast*.ipynb
+# test-cosmofast*.ipynb
 
 # Distribution / packaging
 .Python
