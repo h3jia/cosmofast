@@ -71,7 +71,7 @@ def _smica_j(const double[::1] lens_b, const double[::1] cmb_b, const double ap,
         for i in range(n_bin):
             out_j[0, i] = 0.
             for j in range(n_bin):
-                out_j[0, i] += siginv[i, j] * y0[j]
+                out_j[0, i] -= siginv[i, j] * y0[j]
         if n_cmb:
             out_j[0, 2 * n_bin] = 0.
             for i in range(n_bin):
@@ -101,7 +101,7 @@ def _smica_fj(const double[::1] lens_b, const double[::1] cmb_b, const double ap
         for i in range(n_bin):
             out_j[0, i] = 0.
             for j in range(n_bin):
-                out_j[0, i] += siginv[i, j] * y0[j]
+                out_j[0, i] -= siginv[i, j] * y0[j]
         out_f[0] = 0.
         for i in range(n_bin):
             out_f[0] += out_j[0, i] * y0[i]
