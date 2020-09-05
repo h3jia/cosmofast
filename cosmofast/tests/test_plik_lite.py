@@ -109,5 +109,5 @@ def test_f_ttteee():
 
 def test_j_ttteee():
     assert np.isclose(
-        j_ttteee[0], nd.Gradient(bf_f_ttteee, step=1e-8)(x_ttteee), rtol=1e-3,
+        j_ttteee[0], nd.Gradient(bf_f_ttteee, step=1e-8)(x_ttteee), rtol=1e-2,
         atol=0).all()
