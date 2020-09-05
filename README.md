@@ -1,5 +1,11 @@
 # CosmoFast
 
+![python package](https://github.com/HerculesJack/cosmofast/workflows/python%20package/badge.svg)
+[![codecov](https://codecov.io/gh/HerculesJack/cosmofast/branch/master/graph/badge.svg)](https://codecov.io/gh/HerculesJack/cosmofast)
+![PyPI](https://img.shields.io/pypi/v/cosmofast)
+![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/cosmofast)
+[![Documentation Status](https://readthedocs.org/projects/cosmofast/badge/?version=latest)](https://cosmofast.readthedocs.io/en/latest/?badge=latest)
+
 CosmoFast is an add-on package for
 [BayesFast](https://github.com/HerculesJack/bayesfast)
 developed by [He Jia](http://hejia.io) and 
@@ -16,12 +22,20 @@ and then install CosmoFast from source with:
 git clone https://github.com/HerculesJack/cosmofast
 cd cosmofast
 pip install -e .
+# you can drop the -e option if you don't want to use editable mode
+# but note that pytest may not work correctly in this case
+```
+
+To check if CosmoFast is built correctly, you can do:
+
+```
+pytest # for this you will need to have pytest and numdifftools installed
 ```
 
 ## Dependencies
 
-CosmoFast depends on astropy, bayesfast, cython, numpy and scipy.
-Currently, it is only tested on Linux with Python 3.6.
+CosmoFast requires python>=3.6, astropy, bayesfast, cython, numpy and scipy.
+Currently, it has been tested on Ubuntu and MacOS, with python 3.6-3.8.
 
 ## License
 
