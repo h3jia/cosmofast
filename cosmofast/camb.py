@@ -6,6 +6,8 @@ __all__ = ['CAMB']
 
 # TODO: add consistency module to allow different parameterization
 
+
 class CAMB:
-    
-    def __init__(self, )
+
+    def __init__(self, *args, **kwargs):
+        raise NotImplementedError
