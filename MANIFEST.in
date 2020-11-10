@@ -1,0 +1,7 @@
+include cosmofast/planck_18/_commander.pyx
+include cosmofast/planck_18/_plik_lite.pyx
+include cosmofast/planck_18/_simall.pyx
+include cosmofast/planck_18/_smica.pyx
+
+global-include *.npz
+global-exclude *.c
