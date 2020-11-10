@@ -80,8 +80,8 @@ setup(
     url='https://github.com/HerculesJack/cosmofast',
     license='Apache License, Version 2.0',
     python_requires=">=3.6",
-    install_requires=['astropy', 'bayesfast', 'cython', 'extension-helpers',
-                      'numpy', 'scipy'],
+    install_requires=['astropy', 'bayesfast', 'camb', 'cython',
+                      'extension-helpers', 'numpy', 'scipy'],
     packages=find_packages(),
     ext_modules=cythonize(ext_modules, language_level="3"),
 )
