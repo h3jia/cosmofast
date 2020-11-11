@@ -34,8 +34,8 @@ pytest # for this you will need to have pytest and numdifftools installed
 
 ## Dependencies
 
-CosmoFast requires python>=3.6, astropy, bayesfast, cython, numpy and scipy.
-Currently, it has been tested on Ubuntu and MacOS, with python 3.6-3.8.
+CosmoFast requires python>=3.6, astropy, bayesfast, camb, cython, numpy and
+scipy. Currently, it has been tested on Ubuntu and MacOS, with python 3.6-3.8.
 
 ## License
 
