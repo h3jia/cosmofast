@@ -31,6 +31,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-cov
+    - name: set gcc & gfortran symlink for macos
+      if: contains(matrix.os, 'macos')
+      run: |
+        ln -s /usr/local/bin/gcc-9 /usr/local/bin/gcc
+        ln -s /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
+        gcc --version
+        gfortran --version
     - name: install cosmofast
       run: |
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
