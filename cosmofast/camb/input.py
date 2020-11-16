@@ -4,7 +4,7 @@ from bayesfast.utils.collections import PropertyList
 from collections import OrderedDict
 import camb
 
-__all__ = []
+__all__ = ['CInputBase', 'CInput']
 
 # TODO: add consistency module to allow different parameterization
 
@@ -30,7 +30,7 @@ _default_input = OrderedDict(
 )
 
 
-_supported_input = list(_default_input.keys())
+_supported_keys = list(_default_input.keys())
 
 
 _set_cosmology_keys = ['H0', 'ombh2', 'omch2', 'omk', 'mnu', 'nnu', 'YHe',
@@ -57,8 +57,9 @@ class CInputBase:
 
 class CInput(CInputBase):
     '''Default CAMB input model.'''
-    def __init__(self, input_vars):
+    def __init__(self, input_vars, post=None):
         self.input_vars = input_vars
+        self.post = post
 
     @property
     def input_vars(self):
@@ -71,9 +72,17 @@ class CInput(CInputBase):
     def _input_check(self, input_vars):
         input_vars = list(input_vars)
         for iv in input_vars:
-            if not (iv in _supported_input):
+            if not (iv in _supported_keys):
                 raise ValueError('unsupported input variable: {}.'.format(iv))
         return input_vars
+
+    @property
+    def post(self):
+        return self._post
+
+    @post.setter
+    def post(self, p):
+        self._post = p if callable(p) else (lambda params, x: params)
 
     def get(self, x):
         try:
@@ -85,11 +94,11 @@ class CInput(CInputBase):
         for i, iv in enumerate(self.input_vars):
             input_dict[iv] = x[i]
 
-        pars = camb.CAMBparams()
-        pars.set_cosmology(**_get_subdict(input_dict, _set_cosmology_keys))
+        params = camb.CAMBparams()
+        params.set_cosmology(**_get_subdict(input_dict, _set_cosmology_keys))
         _dark_energy_model = 'fluid' if input_dict['wa'] == 0. else 'ppf'
-        pars.set_dark_energy(dark_energy_model=_dark_energy_model,
+        params.set_dark_energy(dark_energy_model=_dark_energy_model,
                              **_get_subdict(input_dict, _set_dark_energy_keys))
-        pars.InitPower.set_params(**_get_subdict(input_dict,
+        params.InitPower.set_params(**_get_subdict(input_dict,
                                                  _set_init_power_keys))
-        return pars
+        return self.post(params, x)
