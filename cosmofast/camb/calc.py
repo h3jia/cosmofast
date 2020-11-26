@@ -578,6 +578,8 @@ class CCalcBase:
     def get(self, camb_data, tmp_dict):
         raise NotImplementedError('abstract property.')
 
+    __call__ = get
+
 
 class CCalc(CCalcBase):
     '''Default CAMB calc model.'''
@@ -592,7 +594,10 @@ class CCalc(CCalcBase):
             self.output_vars = self._element_dict['output_vars']
         else:
             self.output_vars = output_vars
-        self.kwargs = self._element_dict['kwargs'] if kwargs is None else kwargs
+        k = self._element_dict['kwargs']
+        if kwargs is not None:
+            k.update(kwargs)
+        self.kwargs = k
         self.post = self._element_dict['post'] if post is None else post
 
     @property
@@ -604,6 +609,7 @@ class CCalc(CCalcBase):
         try:
             exec("assert _" + n + "['name'] == n")
             exec("self._element_dict = _" + n)
+            self._name = n
         except Exception:
             self._element_dict = None
             raise ValueError('unsupported calc element: {}.'.format(n))
@@ -664,11 +670,13 @@ class CCalc(CCalcBase):
 
     def get(self, camb_data, tmp_dict):
         try:
-            exec('f = camb_data.' + self.name)
-            r = self.post(f(**self.kwargs))
+            exec('self._f = camb_data.' + self.name)
+            r = self.post(self._f(**self.kwargs), self.output_vars)
             assert len(r) == len(self.output_vars)
             for i, k in enumerate(self.output_vars):
                 tmp_dict[k] = r[i]
         except Exception:
             raise RuntimeError(
                 'failed to do CAMB calc for {}.'.format(self.name))
+
+    __call__ = get

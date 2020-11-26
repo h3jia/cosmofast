@@ -46,7 +46,7 @@ class COutput(COutputBase):
     @get.setter
     def get(self, g):
         if g is None:
-            self._get = lambda tmp_dict: tmp_dict
+            self._get = lambda tmp_dict: list(tmp_dict.values())
         elif callable(g):
             self._get = g
         else:
