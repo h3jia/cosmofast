@@ -7,8 +7,8 @@ __all__ = ['Simall']
 
 
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
-foo_ee = np.load(os.path.join(CURRENT_PATH, 'data/simall_ee.npz'))
-foo_bb = np.load(os.path.join(CURRENT_PATH, 'data/simall_bb.npz'))
+foo_ee = dict(np.load(os.path.join(CURRENT_PATH, 'data/simall_ee.npz')))
+foo_bb = dict(np.load(os.path.join(CURRENT_PATH, 'data/simall_bb.npz')))
 
 
 class Simall(Module):
@@ -122,41 +122,41 @@ class Simall(Module):
             assert raw_cl.ndim == 1
             assert raw_cl.size >= 30
         except Exception:
-            raise ValueError('invalid shapr for raw_cl.')
+            raise ValueError('invalid shape for raw_cl.')
         return raw_cl[2:30]
 
-    def _fun(self, cl, ap):
+    def _fun(self, m, ap):
         out_f = np.empty(1)
         if self.kind == 'EE':
-            _simall_f(cl, ap, out_f, foo_ee['c'], foo_ee['step'],
+            _simall_f(m, ap, out_f, foo_ee['c'], foo_ee['step'],
                       foo_ee['n_step'])
         elif self.kind == 'BB':
-            _simall_f(cl, ap, out_f, foo_bb['c'], foo_bb['step'],
+            _simall_f(m, ap, out_f, foo_bb['c'], foo_bb['step'],
                       foo_bb['n_step'])
         else:
             raise RuntimeError('unexpected value for self.kind.')
         return out_f
 
-    def _jac(self, cl, ap):
+    def _jac(self, m, ap):
         out_j = np.empty((1, 29))
         if self.kind == 'EE':
-            _simall_j(cl, ap, out_j, foo_ee['c'], foo_ee['step'],
+            _simall_j(m, ap, out_j, foo_ee['c'], foo_ee['step'],
                       foo_ee['n_step'])
         elif self.kind == 'BB':
-            _simall_j(cl, ap, out_j, foo_bb['c'], foo_bb['step'],
+            _simall_j(m, ap, out_j, foo_bb['c'], foo_bb['step'],
                       foo_bb['n_step'])
         else:
             raise RuntimeError('unexpected value for self.kind.')
         return out_j
 
-    def _fun_and_jac(self, cl, ap):
+    def _fun_and_jac(self, m, ap):
         out_f = np.empty(1)
         out_j = np.empty((1, 29))
         if self.kind == 'EE':
-            _simall_fj(cl, ap, out_f, out_j, foo_ee['c'], foo_ee['step'],
+            _simall_fj(m, ap, out_f, out_j, foo_ee['c'], foo_ee['step'],
                        foo_ee['n_step'])
         elif self.kind == 'BB':
-            _simall_fj(cl, ap, out_f, out_j, foo_bb['c'], foo_bb['step'],
+            _simall_fj(m, ap, out_f, out_j, foo_bb['c'], foo_bb['step'],
                       foo_bb['n_step'])
         else:
             raise RuntimeError('unexpected value for self.kind.')

@@ -93,20 +93,20 @@ class Commander(Module):
             raise ValueError('invalid shapr for raw_cl.')
         return raw_cl[2:30]
 
-    def _fun(self, cl, ap):
+    def _fun(self, m, ap):
         out_f = np.empty(1)
-        _commander_f(cl, ap, out_f, cl2x, mu, cov_inv)
+        _commander_f(m, ap, out_f, cl2x, mu, cov_inv)
         out_f -= offset
         return out_f
 
-    def _jac(self, cl, ap):
+    def _jac(self, m, ap):
         out_j = np.empty((1, 29))
-        _commander_j(cl, ap, out_j, cl2x, mu, cov_inv)
+        _commander_j(m, ap, out_j, cl2x, mu, cov_inv)
         return out_j
 
-    def _fun_and_jac(self, cl, ap):
+    def _fun_and_jac(self, m, ap):
         out_f = np.empty(1)
         out_j = np.empty((1, 29))
-        _commander_fj(cl, ap, out_f, out_j, cl2x, mu, cov_inv)
+        _commander_fj(m, ap, out_f, out_j, cl2x, mu, cov_inv)
         out_f -= offset
         return out_f, out_j
