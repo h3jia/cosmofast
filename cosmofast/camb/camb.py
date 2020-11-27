@@ -12,8 +12,8 @@ class CAMB(Module):
     '''CAMB cosmology model.'''
     def __init__(self, c_input, c_calc, output_vars=None, get_output=None,
                  delete_vars=[], label=None):
-        super().__init__(delete_vars=delete_vars, concat_join_input=True,
-                         label=label)
+        super().__init__(delete_vars=delete_vars, concat_input=True,
+                         concat_output=False, label=label)
         self.c_input = c_input
         self.c_calc = c_calc
         self.output_vars = output_vars
@@ -61,16 +61,16 @@ class CAMB(Module):
 
     @property
     def output_vars(self):
-        if self._ouput_vars is None:
+        if self._output_vars is None:
             try:
                 ov = [v for c in self.c_calc for v in c.output_vars]
                 assert all(isinstance(v, str) for v in ov)
-                ov = list(set(ov))
+                ov = sorted(set(ov), key=ov.index) # remove redundant elements
                 return ov
-            except:
+            except Exception:
                 raise RuntimeError('failed to get output_vars from c_calc.')
         else:
-            return self._ouput_vars
+            return self._output_vars
 
     @output_vars.setter
     def output_vars(self, ov):
