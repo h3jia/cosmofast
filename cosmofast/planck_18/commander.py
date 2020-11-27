@@ -37,9 +37,9 @@ class Commander(Module):
         return self._tt_name
 
     @tt_name.setter
-    def tt_name(self, rcn):
-        if isinstance(rcn, str):
-            self._tt_name = rcn
+    def tt_name(self, ttn):
+        if isinstance(ttn, str):
+            self._tt_name = ttn
         else:
             raise ValueError('invalid value for tt_name.')
 
@@ -48,9 +48,9 @@ class Commander(Module):
         return self._m_name
 
     @m_name.setter
-    def m_name(self, cn):
-        if isinstance(cn, str):
-            self._m_name = cn
+    def m_name(self, mn):
+        if isinstance(mn, str):
+            self._m_name = mn
         else:
             raise ValueError('invalid value for m_name.')
 
@@ -85,7 +85,7 @@ class Commander(Module):
         return [self.logp_name]
 
     def pre_cl(self, tmp_dict):
-        raw_cl = tmp_dict['tt_name']
+        raw_cl = tmp_dict[self.tt_name]
         try:
             assert raw_cl.ndim == 1
             assert raw_cl.size >= 30
