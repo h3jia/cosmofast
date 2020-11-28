@@ -39,6 +39,9 @@ class Simall(Module):
     def kind(self, k):
         if k == 'EE' or k == 'BB':
             self._kind = k
+        elif k == 'EEBB':
+            raise NotImplementedError('for EEBB, please just use one EE plus '
+                                      'one BB for now.')
         else:
             raise ValueError('invalid value for kind.')
 

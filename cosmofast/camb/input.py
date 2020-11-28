@@ -81,8 +81,9 @@ class CInputBase:
 
 class CInput(CInputBase):
     '''Default CAMB input model.'''
-    def __init__(self, input_vars, post=None):
+    def __init__(self, input_vars, fixed_vars={}, post=None):
         self.input_vars = input_vars
+        self.fixed_vars = fixed_vars
         self.post = post
 
     @property
@@ -104,6 +105,17 @@ class CInput(CInputBase):
         return input_vars
 
     @property
+    def fixed_vars(self):
+        return self._fixed_vars
+
+    @fixed_vars.setter
+    def fixed_vars(self, fv):
+        try:
+            self._fixed_vars = dict(fv)
+        except Exception:
+            raise ValueError('invalid value for fixed_vars.')
+
+    @property
     def post(self):
         return self._post
 
@@ -118,6 +130,7 @@ class CInput(CInputBase):
         except Exception:
             raise ValueError('invalid input x.')
         input_dict = _default_input.copy()
+        input_dict.update(self.fixed_vars)
         for i, iv in enumerate(self.input_vars):
             input_dict[iv] = x[i]
 
