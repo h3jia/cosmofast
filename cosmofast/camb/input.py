@@ -81,10 +81,10 @@ class CInputBase:
 
 class CInput(CInputBase):
     '''Default CAMB input model.'''
-    def __init__(self, input_vars, fixed_vars={}, post=None):
+    def __init__(self, input_vars, fixed_vars={}, get_output=None):
         self.input_vars = input_vars
         self.fixed_vars = fixed_vars
-        self.post = post
+        self.get_output = get_output
 
     @property
     def input_vars(self):
@@ -116,12 +116,12 @@ class CInput(CInputBase):
             raise ValueError('invalid value for fixed_vars.')
 
     @property
-    def post(self):
-        return self._post
+    def get_output(self):
+        return self._get_output
 
-    @post.setter
-    def post(self, p):
-        self._post = p if callable(p) else (lambda params, x: params)
+    @get_output.setter
+    def get_output(self, p):
+        self._get_output = p if callable(p) else (lambda params, x: params)
 
     def get(self, x):
         try:
@@ -141,6 +141,6 @@ class CInput(CInputBase):
                              **_get_subdict(input_dict, _set_dark_energy_keys))
         params.InitPower.set_params(**_get_subdict(input_dict,
                                                  _set_init_power_keys))
-        return self.post(params, x)
+        return self.get_output(params, x)
 
     __call__ = get

@@ -1,5 +1,5 @@
 import numpy as np
-from bayesfast import Module
+from bayesfast import ModuleBase
 from ._simall import _simall_f, _simall_j, _simall_fj
 import os
 
@@ -11,25 +11,19 @@ foo_ee = dict(np.load(os.path.join(CURRENT_PATH, 'data/simall_ee.npz')))
 foo_bb = dict(np.load(os.path.join(CURRENT_PATH, 'data/simall_bb.npz')))
 
 
-class Simall(Module):
+class Simall(ModuleBase):
     """Planck 2018 Simall low-l EE and BB likelihoods."""
     def __init__(self, kind='EE', ee_name='EE', bb_name='BB', m_name=None,
                  ap_name='a_planck', logp_name=None, delete_vars=[],
                  label=None):
-        super().__init__(delete_vars=delete_vars, concat_input=False,
-                         concat_output=False, label=label)
+        super().__init__(delete_vars=delete_vars, input_shapes=None,
+                         output_shapes=None, label=label)
         self.kind = kind
         self.ee_name = ee_name
         self.bb_name = bb_name
         self.m_name = m_name
         self.ap_name = ap_name
         self.logp_name = logp_name
-
-    def _fun_jac_init(self, fun, jac, fun_and_jac):
-        pass
-
-    def _input_output_init(self, input_vars, output_vars):
-        pass
 
     @property
     def kind(self):
@@ -114,7 +108,11 @@ class Simall(Module):
     def output_vars(self):
         return [self.logp_name]
 
-    def pre_cl(self, tmp_dict):
+    @property
+    def camb_output_vars(self):
+        return [self.m_name]
+
+    def camb_get_output(self, tmp_dict):
         if self.kind == 'EE':
             raw_cl = tmp_dict[self.ee_name]
         elif self.kind == 'BB':

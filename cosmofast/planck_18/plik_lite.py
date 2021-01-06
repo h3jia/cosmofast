@@ -1,5 +1,5 @@
 import numpy as np
-from bayesfast import Module
+from bayesfast import ModuleBase
 from ._plik_lite import _get_binned_cls, _plik_lite_f
 from ._plik_lite import _plik_lite_j, _plik_lite_fj
 import os
@@ -13,13 +13,13 @@ foo_ttteee = dict(
     np.load(os.path.join(CURRENT_PATH, 'data/plik_lite_ttteee.npz')))
 
 
-class PlikLite(Module):
+class PlikLite(ModuleBase):
     """Planck 2018 PlikLite high-l TT and TTTEEE likelihoods."""
     def __init__(self, kind='TT', tt_name='TT', te_name='TE', ee_name='EE',
                  m_name=None, ap_name='a_planck', logp_name=None,
                  delete_vars=[], label=None):
-        super().__init__(delete_vars=delete_vars, concat_input=False,
-                         concat_output=False, label=label)
+        super().__init__(delete_vars=delete_vars, input_shapes=None,
+                         output_shapes=None, label=label)
         self.kind = kind
         self.tt_name = tt_name
         self.te_name = te_name
@@ -27,12 +27,6 @@ class PlikLite(Module):
         self.m_name = m_name
         self.ap_name = ap_name
         self.logp_name = logp_name
-
-    def _fun_jac_init(self, fun, jac, fun_and_jac):
-        pass
-
-    def _input_output_init(self, input_vars, output_vars):
-        pass
 
     @property
     def kind(self):
@@ -125,7 +119,11 @@ class PlikLite(Module):
     def output_vars(self):
         return [self.logp_name]
 
-    def pre_cl(self, tmp_dict):
+    @property
+    def camb_output_vars(self):
+        return [self.m_name]
+
+    def camb_get_output(self, tmp_dict):
         raw_tt = tmp_dict[self.tt_name]
         try:
             assert raw_tt.ndim == 1

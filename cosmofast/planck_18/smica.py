@@ -1,5 +1,5 @@
 import numpy as np
-from bayesfast import Module
+from bayesfast import ModuleBase
 from ._smica import _get_binned_cls, _smica_f, _smica_j, _smica_fj
 import os
 
@@ -12,13 +12,13 @@ foo_cmb_marged = dict(
     np.load(os.path.join(CURRENT_PATH, 'data/smica_cmb_marged.npz')))
 
 
-class Smica(Module):
+class Smica(ModuleBase):
     """Planck 2018 Smica lensing likelihoods."""
     def __init__(self, cmb_marged=False, pp_name='PP', tt_name='TT',
                  te_name='TE', ee_name='EE', m_name=None, ap_name='a_planck',
                  logp_name=None, delete_vars=[], label=None):
-        super().__init__(delete_vars=delete_vars, concat_input=False,
-                         concat_output=False, label=label)
+        super().__init__(delete_vars=delete_vars, input_shapes=None,
+                         output_shapes=None, label=label)
         self.cmb_marged = cmb_marged
         self.pp_name = pp_name
         self.tt_name = tt_name
@@ -27,12 +27,6 @@ class Smica(Module):
         self.m_name = m_name
         self.ap_name = ap_name
         self.logp_name = logp_name
-
-    def _fun_jac_init(self, fun, jac, fun_and_jac):
-        pass
-
-    def _input_output_init(self, input_vars, output_vars):
-        pass
 
     @property
     def cmb_marged(self):
@@ -136,7 +130,11 @@ class Smica(Module):
     def output_vars(self):
         return [self.logp_name]
 
-    def pre_cl(self, tmp_dict):
+    @property
+    def camb_output_vars(self):
+        return [self.m_name]
+
+    def camb_get_output(self, tmp_dict):
         raw_pp = tmp_dict[self.pp_name]
         try:
             assert raw_pp.ndim == 1

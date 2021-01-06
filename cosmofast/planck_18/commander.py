@@ -1,5 +1,5 @@
 import numpy as np
-from bayesfast import Module
+from bayesfast import ModuleBase
 from ._commander import _commander_f, _commander_j, _commander_fj
 import os
 
@@ -15,22 +15,16 @@ cov_inv = np.linalg.inv(cov)
 offset = foo['offset']
 
 
-class Commander(Module):
+class Commander(ModuleBase):
     """Planck 2018 Commander low-l TT likelihood."""
     def __init__(self, tt_name='TT', m_name='TT-Commander', ap_name='a_planck',
                  logp_name='logp-Commander', delete_vars=[], label=None):
-        super().__init__(delete_vars=delete_vars, concat_input=False,
-                         concat_output=False, label=label)
+        super().__init__(delete_vars=delete_vars, input_shapes=None,
+                         output_shapes=None, label=label)
         self.tt_name = tt_name
         self.m_name = m_name
         self.ap_name = ap_name
         self.logp_name = logp_name
-
-    def _fun_jac_init(self, fun, jac, fun_and_jac):
-        pass
-
-    def _input_output_init(self, input_vars, output_vars):
-        pass
 
     @property
     def tt_name(self):
@@ -84,7 +78,11 @@ class Commander(Module):
     def output_vars(self):
         return [self.logp_name]
 
-    def pre_cl(self, tmp_dict):
+    @property
+    def camb_output_vars(self):
+        return [self.m_name]
+
+    def camb_get_output(self, tmp_dict):
         raw_cl = tmp_dict[self.tt_name]
         try:
             assert raw_cl.ndim == 1

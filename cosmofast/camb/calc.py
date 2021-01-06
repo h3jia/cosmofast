@@ -32,7 +32,7 @@ _angular_diameter_distance = OrderedDict(
     min_calc=1,
     output_vars=['angular_diameter_distance'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('angular_diameter_distance')
@@ -45,7 +45,7 @@ _angular_diameter_distance2 = OrderedDict(
     min_calc=1,
     output_vars=['angular_diameter_distance2'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('angular_diameter_distance2')
@@ -58,7 +58,7 @@ _comoving_radial_distance = OrderedDict(
     min_calc=1,
     output_vars=['comoving_radial_distance'],
     kwargs={'tol': 0.0001},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('comoving_radial_distance')
@@ -71,7 +71,7 @@ _conformal_time = OrderedDict(
     min_calc=1,
     output_vars=['conformal_time'],
     kwargs={'presorted': None, 'tol': None},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('conformal_time')
@@ -84,7 +84,7 @@ _conformal_time_a1_a2 = OrderedDict(
     min_calc=1,
     output_vars=['conformal_time_a1_a2'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('conformal_time_a1_a2')
@@ -97,7 +97,7 @@ _cosmomc_theta = OrderedDict(
     min_calc=1,
     output_vars=['cosmomc_theta'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('cosmomc_theta')
@@ -116,7 +116,7 @@ _get_Omega = OrderedDict(
     min_calc=1,
     output_vars=_get_Omega_vars,
     kwargs={'z': 0.},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('get_Omega')
@@ -133,7 +133,7 @@ _get_background_densities = OrderedDict(
     output_vars=_get_background_densities_vars,
     kwargs={'vars': ['tot', 'K', 'cdm', 'baryon', 'photon', 'neutrino', 'nu',
             'de'], 'format': 'array'},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_background_densities')
@@ -146,7 +146,7 @@ _get_background_outputs = OrderedDict(
     min_calc=2,
     output_vars=['rs/DV', 'H', 'DA', 'F_AP'],
     kwargs={},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_background_outputs')
@@ -163,7 +163,7 @@ _get_background_redshift_evolution = OrderedDict(
     output_vars=_get_background_redshift_evolution_vars,
     kwargs={'vars': ['x_e', 'opacity', 'visibility', 'cs2b', 'T_b', 'dopacity',
             'ddopacity', 'dvisibility', 'ddvisibility'], 'format': 'array'},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_background_redshift_evolution')
@@ -180,7 +180,7 @@ _get_background_time_evolution = OrderedDict(
     output_vars=_get_background_time_evolution_vars,
     kwargs={'vars': ['x_e', 'opacity', 'visibility', 'cs2b', 'T_b', 'dopacity',
             'ddopacity', 'dvisibility', 'ddvisibility'], 'format': 'array'},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_background_time_evolution')
@@ -202,7 +202,7 @@ _get_cmb_unlensed_scalar_array_dict = OrderedDict(
     min_calc=3,
     output_vars=['TxT', 'TxE', 'TxP', 'ExT', 'ExE', 'ExP', 'PxT', 'PxE', 'PxP'],
     kwargs={'params': None, 'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_from_dict,
+    get_output=_from_dict,
 )
 
 _supported_keys.append('get_cmb_unlensed_scalar_array_dict')
@@ -215,7 +215,7 @@ _get_dark_energy_rho_w = OrderedDict(
     min_calc=1,
     output_vars=['rho_de_at_a', 'w_at_a'],
     kwargs={},
-    post=_to_list,
+    get_output=_to_list,
 )
 
 _supported_keys.append('get_dark_energy_rho_w')
@@ -229,7 +229,7 @@ _get_derived_params = OrderedDict(
     output_vars=['age', 'zstar', 'rstar', 'thetastar', 'DAstar', 'zdrag',
                  'rdrag', 'kd', 'thetad', 'zeq', 'keq', 'thetaeq', 'thetarseq'],
     kwargs={},
-    post=_from_dict,
+    get_output=_from_dict,
 )
 
 _supported_keys.append('get_derived_params')
@@ -242,7 +242,7 @@ _get_fsigma8 = OrderedDict(
     min_calc=3,
     output_vars=['fsigma8'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('get_fsigma8')
@@ -255,7 +255,7 @@ _get_lens_potential_cls = OrderedDict(
     min_calc=3,
     output_vars=['PP', 'PT', 'PE'],
     kwargs={'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_lens_potential_cls')
@@ -269,7 +269,7 @@ _get_lensed_gradient_cls = OrderedDict(
     output_vars=['TgradT', 'EgradE', 'BgradB', 'PPperp', 'TgradE', 'TPperp',
                  'gradT2', 'gradTgradT'],
     kwargs={'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_lensed_gradient_cls')
@@ -282,7 +282,7 @@ _get_lensed_scalar_cls = OrderedDict(
     min_calc=3,
     output_vars=['TT', 'EE', 'BB', 'TE'],
     kwargs={'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_lensed_scalar_cls')
@@ -318,7 +318,7 @@ _get_redshift_evolution = OrderedDict(
             'v_baryon_cdm', 'a', 'etak', 'H', 'growth', 'v_photon', 'pi_photon',
             'E_2', 'v_neutrino', 'T_source', 'E_source',
             'lens_potential_source'], 'lAccuracyBoost': 4},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_redshift_evolution')
@@ -331,7 +331,7 @@ _get_sigma8 = OrderedDict(
     min_calc=3,
     output_vars=['sigma8'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('get_sigma8')
@@ -344,7 +344,7 @@ _get_sigma8_0 = OrderedDict(
     min_calc=3,
     output_vars=['sigma8_0'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('get_sigma8_0')
@@ -358,7 +358,7 @@ _get_sigmaR = OrderedDict(
     output_vars=['sigmaR'],
     kwargs={'z_indices': None, 'var1': None, 'var2': None, 'hubble_units': True,
             'return_R_z': False},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('get_sigmaR')
@@ -371,7 +371,7 @@ _get_source_cls_dict = OrderedDict(
     min_calc=3,
     output_vars=['PxP'],
     kwargs={'params': None, 'lmax': None, 'raw_cl': False},
-    post=_from_dict,
+    get_output=_from_dict,
 )
 
 _supported_keys.append('get_source_cls_dict')
@@ -384,7 +384,7 @@ _get_tensor_cls = OrderedDict(
     min_calc=3,
     output_vars=['TT_tensor', 'EE_tensor', 'BB_tensor', 'TE_tensor'],
     kwargs={'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_tensor_cls')
@@ -405,7 +405,7 @@ _get_time_evolution = OrderedDict(
             'v_baryon_cdm', 'a', 'etak', 'H', 'growth', 'v_photon', 'pi_photon',
             'E_2', 'v_neutrino', 'T_source', 'E_source',
             'lens_potential_source'], 'lAccuracyBoost': 4, 'frame': 'CDM'},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_time_evolution')
@@ -418,7 +418,7 @@ _get_total_cls = OrderedDict(
     min_calc=3,
     output_vars=['TT_total', 'EE_total', 'BB_total', 'TE_total'],
     kwargs={'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_total_cls')
@@ -435,7 +435,7 @@ _get_unlensed_scalar_cls = OrderedDict(
     output_vars=['TT_unlensed_scalar', 'EE_unlensed_scalar',
                  'BB_unlensed_scalar', 'TE_unlensed_scalar'],
     kwargs={'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_unlensed_scalar_cls')
@@ -449,7 +449,7 @@ _get_unlensed_total_cls = OrderedDict(
     output_vars=['TT_unlensed_total', 'EE_unlensed_total', 'BB_unlensed_total',
                  'TE_unlensed_total'],
     kwargs={'lmax': None, 'CMB_unit': None, 'raw_cl': False},
-    post=_split_along_last,
+    get_output=_split_along_last,
 )
 
 _supported_keys.append('get_unlensed_total_cls')
@@ -462,7 +462,7 @@ _h_of_z = OrderedDict(
     min_calc=1,
     output_vars=['h_of_z'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('h_of_z')
@@ -475,7 +475,7 @@ _hubble_parameter = OrderedDict(
     min_calc=1,
     output_vars=['hubble_parameter'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('hubble_parameter')
@@ -488,7 +488,7 @@ _luminosity_distance = OrderedDict(
     min_calc=1,
     output_vars=['luminosity_distance'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('luminosity_distance')
@@ -501,7 +501,7 @@ _physical_time = OrderedDict(
     min_calc=1,
     output_vars=['physical_time'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('physical_time')
@@ -514,7 +514,7 @@ _physical_time_a1_a2 = OrderedDict(
     min_calc=1,
     output_vars=['physical_time_a1_a2'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('physical_time_a1_a2')
@@ -530,7 +530,7 @@ _redshift_at_comoving_radial_distance = OrderedDict(
     min_calc=2,
     output_vars=['redshift_at_chi'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('redshift_at_comoving_radial_distance')
@@ -543,7 +543,7 @@ _redshift_at_conformal_time = OrderedDict(
     min_calc=2,
     output_vars=['redshift_at_eta'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('redshift_at_conformal_time')
@@ -556,7 +556,7 @@ _sound_horizon = OrderedDict(
     min_calc=1,
     output_vars=['r_s'],
     kwargs={},
-    post=_put_in_list,
+    get_output=_put_in_list,
 )
 
 _supported_keys.append('sound_horizon')
@@ -584,7 +584,7 @@ class CCalcBase:
 class CCalc(CCalcBase):
     '''Default CAMB calc model.'''
     def __init__(self, name, min_calc=None, output_vars=None, kwargs=None,
-                 post=None):
+                 get_output=None):
         self.name = name
         if min_calc is None:
             self.min_calc = self._element_dict['min_calc']
@@ -598,7 +598,10 @@ class CCalc(CCalcBase):
         if kwargs is not None:
             k.update(kwargs)
         self.kwargs = k
-        self.post = self._element_dict['post'] if post is None else post
+        if get_output is None:
+            self.get_output = self._element_dict['get_output']
+        else:
+            self.get_output = get_output
 
     @property
     def name(self):
@@ -661,17 +664,17 @@ class CCalc(CCalcBase):
             raise ValueError('invalid value for kwargs.')
 
     @property
-    def post(self):
-        return self._post
+    def get_output(self):
+        return self._get_output
 
-    @post.setter
-    def post(self, p):
-        self._post = p if callable(p) else (lambda *args: args)
+    @get_output.setter
+    def get_output(self, p):
+        self._get_output = p if callable(p) else (lambda *args: args)
 
     def get(self, camb_data, tmp_dict):
         try:
             exec('self._f = camb_data.' + self.name)
-            r = self.post(self._f(**self.kwargs), self.output_vars)
+            r = self.get_output(self._f(**self.kwargs), self.output_vars)
             assert len(r) == len(self.output_vars)
             for i, k in enumerate(self.output_vars):
                 tmp_dict[k] = r[i]

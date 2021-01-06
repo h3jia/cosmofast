@@ -1,30 +1,24 @@
 from .input import CInputBase
 from .calc import CCalcBase
-from bayesfast import Module
+from bayesfast import ModuleBase
 from bayesfast.utils.collections import PropertyList
 from collections import OrderedDict
+from itertools import chain
+import numpy as np
 import camb
 
 __all__ = ['CAMB']
 
 
-class CAMB(Module):
+class CAMB(ModuleBase):
     '''CAMB cosmology model.'''
     def __init__(self, c_input, c_calc, output_vars=None, get_output=None,
                  delete_vars=[], label=None):
-        super().__init__(delete_vars=delete_vars, concat_input=True,
-                         concat_output=False, label=label)
+        super().__init__(output_vars=output_vars, delete_vars=delete_vars,
+                         input_shapes=-1, output_shapes=None, label=label)
         self.c_input = c_input
         self.c_calc = c_calc
-        self.output_vars = output_vars
         self.get_output = get_output
-
-    def _fun_jac_init(self, fun, jac, fun_and_jac):
-        self._jac = None
-        self._fun_and_jac = None
-
-    def _input_output_init(self, input_vars, output_vars):
-        pass
 
     @property
     def c_input(self):
@@ -78,7 +72,8 @@ class CAMB(Module):
             self._output_vars = None
         else:
             self._output_vars = PropertyList(
-                ov, lambda x: super()._var_check(x, 'output', False, 'raise'))
+                ov, lambda x: ModuleBase._var_check(x, 'output', 'raise', 1,
+                np.inf))
 
     @staticmethod
     def _dict_output(tmp_dict):
@@ -97,6 +92,10 @@ class CAMB(Module):
             self._get_output = go
         else:
             raise ValueError('invalid value for get_output.')
+
+    @staticmethod
+    def multi_output(fun_list):
+        return lambda x: list(chain([list(fun(x)) for fun in fun_list]))
 
     def _fun(self, x):
         params = self.c_input(x)
