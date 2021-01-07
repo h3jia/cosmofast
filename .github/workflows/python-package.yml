@@ -41,9 +41,7 @@ jobs:
     - name: install bayesfast and cosmofast
       run: |
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pwd
-        cd .. && git clone https://github.com/HerculesJack/bayesfast && cd bayesfast
-        git checkout dev && pip install -e . && cd ../cosmofast
+        pip install git+https://github.com/HerculesJack/bayesfast.git@dev
         pip install -e .
     - name: lint with flake8
       run: |
