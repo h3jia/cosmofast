@@ -120,7 +120,7 @@ cdef int _cubic_012(const double xval, const double* x_s, const double* y_s,
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _commander_f(const double[::1] cls, const double ap, double[::1] out_f,
+def _commander_f(const double[::1] cl, const double ap, double[::1] out_f,
                  const double[:, :, ::1] cl2x, const double[::1] mu,
                  const double[:, ::1] cov_inv, size_t l_min=2, size_t l_max=29,
                  size_t n_b=1000):
@@ -139,7 +139,7 @@ def _commander_f(const double[::1] cls, const double ap, double[::1] out_f,
         for i in range(n_l):
             j = i + l_min
             tmp = j * (j + 1) / 2. / pi / ap2
-            power = cls[i] * tmp
+            power = cl[i] * tmp
             interval = _cubic_01(
                 power, &cl2x[i, 0, 0], &cl2x[i, 1, 0], &cl2x[i, 2, 0], &y0[i], 
                 &y1[i], n_b)
@@ -158,7 +158,7 @@ def _commander_f(const double[::1] cls, const double ap, double[::1] out_f,
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _commander_j(const double[::1] cls, const double ap, double[:, ::1] out_j,
+def _commander_j(const double[::1] cl, const double ap, double[:, ::1] out_j,
                  const double[:, :, ::1] cl2x, const double[::1] mu,
                  const double[:, ::1] cov_inv, size_t l_min=2, size_t l_max=29,
                  size_t n_b=1000):
@@ -177,7 +177,7 @@ def _commander_j(const double[::1] cls, const double ap, double[:, ::1] out_j,
         for i in range(n_l):
             j = i + l_min
             tmp[i] = j * (j + 1) / 2. / pi / ap2
-            power = cls[i] * tmp[i]
+            power = cl[i] * tmp[i]
             interval = _cubic_012(
                 power, &cl2x[i, 0, 0], &cl2x[i, 1, 0], &cl2x[i, 2, 0], &y0[i], 
                 &y1[i], &y2[i], n_b)
@@ -193,7 +193,7 @@ def _commander_j(const double[::1] cls, const double ap, double[:, ::1] out_j,
             out_j[0, i] *= tmp[i]
         out_j[0, n_l] = 0
         for i in range(n_l):
-            out_j[0, n_l] -= 2. * cls[i] / ap * out_j[0, i]
+            out_j[0, n_l] -= 2. * cl[i] / ap * out_j[0, i]
     finally:
         free(y0)
         free(y1)
@@ -204,7 +204,7 @@ def _commander_j(const double[::1] cls, const double ap, double[:, ::1] out_j,
 @cython.wraparound(False)
 @cython.boundscheck(False)
 @cython.cdivision(True)
-def _commander_fj(const double[::1] cls, const double ap, double[::1] out_f,
+def _commander_fj(const double[::1] cl, const double ap, double[::1] out_f,
                   double[:, ::1] out_j, const double[:, :, ::1] cl2x,
                   const double[::1] mu, const double[:, ::1] cov_inv,
                   size_t l_min=2, size_t l_max=29, size_t n_b=1000):
@@ -223,7 +223,7 @@ def _commander_fj(const double[::1] cls, const double ap, double[::1] out_f,
         for i in range(n_l):
             j = i + l_min
             tmp[i] = j * (j + 1) / 2. / pi / ap2
-            power = cls[i] * tmp[i]
+            power = cl[i] * tmp[i]
             interval = _cubic_012(
                 power, &cl2x[i, 0, 0], &cl2x[i, 1, 0], &cl2x[i, 2, 0], &y0[i], 
                 &y1[i], &y2[i], n_b)
@@ -242,7 +242,7 @@ def _commander_fj(const double[::1] cls, const double ap, double[::1] out_f,
             out_j[0, i] *= tmp[i]
         out_j[0, n_l] = 0
         for i in range(n_l):
-            out_j[0, n_l] -= 2. * cls[i] / ap * out_j[0, i]
+            out_j[0, n_l] -= 2. * cl[i] / ap * out_j[0, i]
     finally:
         free(y0)
         free(y1)
