@@ -12,6 +12,13 @@ developed by [He Jia](http://hejia.io) and
 [Uros Seljak](https://physics.berkeley.edu/people/faculty/uros-seljak),
 which provides several frequently-used cosmological modules.
 
+## Links
+
+* BayesFast Website: https://www.bayesfast.org/
+* Documentation: https://cosmofast.readthedocs.io/en/latest/
+* Source Code: https://github.com/HerculesJack/cosmofast
+* Bug Reports: https://github.com/HerculesJack/cosmofast/issues
+
 ## Installation
 
 We plan to add pypi and conda-forge support later. For now, please first install
