@@ -1,3 +1,0 @@
-m2r2
-git+https://github.com/HerculesJack/bayesfast.git@dev
-.
