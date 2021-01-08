@@ -93,9 +93,31 @@ class CAMB(ModuleBase):
         else:
             raise ValueError('invalid value for get_output.')
 
+    def set_output(self, modules):
+        try:
+            if hasattr(modules, 'camb_output_vars'):
+                modules = (modules,)
+            ov = list(chain(*[list(m.camb_output_vars) for m in modules]))
+            assert all([callable(m.camb_get_output) for m in modules])
+            go = self.multi_output([m.camb_get_output for m in modules])
+            self.output_vars = ov
+            self.get_output = go
+        except Exception:
+            raise ValueError('failed to set output for the modules you give.')
+
     @staticmethod
-    def multi_output(fun_list):
-        return lambda x: list(chain([list(fun(x)) for fun in fun_list]))
+    def _check_output(output):
+        if isinstance(output, np.ndarray):
+            return [output]
+        elif isinstance(output, (list, tuple)):
+            return output
+        else:
+            raise RuntimeError('invalid value in _check_output.')
+
+    @classmethod
+    def multi_output(cls, fun_list):
+        return lambda x: list(
+            chain(*[cls._check_output(fun(x)) for fun in fun_list]))
 
     def _fun(self, x):
         params = self.c_input(x)
