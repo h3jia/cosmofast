@@ -81,10 +81,11 @@ class CInputBase:
 
 class CInput(CInputBase):
     '''Default CAMB input model.'''
-    def __init__(self, input_vars, fixed_vars={}, get_output=None):
+    def __init__(self, input_vars, fixed_vars={}, get_output=None, kwargs=None):
         self.input_vars = input_vars
         self.fixed_vars = fixed_vars
         self.get_output = get_output
+        self.kwargs = kwargs
 
     @property
     def input_vars(self):
@@ -123,6 +124,20 @@ class CInput(CInputBase):
     def get_output(self, p):
         self._get_output = p if callable(p) else (lambda params, x: params)
 
+    @property
+    def kwargs(self):
+        return self._kwargs
+
+    @kwargs.setter
+    def kwargs(self, k):
+        if k is None:
+            self._kwargs = {}
+        else:
+            try:
+                self._kwargs = dict(k)
+            except Exception:
+                raise ValueError('invalid value for kwargs.')
+
     def get(self, x):
         try:
             x = np.atleast_1d(x)
@@ -134,7 +149,7 @@ class CInput(CInputBase):
         for i, iv in enumerate(self.input_vars):
             input_dict[iv] = x[i]
 
-        params = camb.CAMBparams()
+        params = camb.CAMBparams(**self.kwargs)
         params.set_cosmology(**_get_subdict(input_dict, _set_cosmology_keys))
         _dark_energy_model = 'fluid' if input_dict['wa'] == 0. else 'ppf'
         params.set_dark_energy(dark_energy_model=_dark_energy_model,
