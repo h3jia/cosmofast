@@ -7,7 +7,6 @@ import camb
 __all__ = ['CInputBase', 'CInput']
 
 # TODO: add consistency module to allow different parameterization
-# TODO: implement convenience utilities for initial points and priors
 
 
 _default_input = OrderedDict(
@@ -28,27 +27,6 @@ _default_input = OrderedDict(
     nrun=0.0,
     nrunrun=0.0,
     r=0.0,
-)
-
-
-_default_init = OrderedDict(
-    H0=[67.0, 20.0, 100.0],
-    ombh2=[0.022, 0.005, 0.1],
-    omch2=[0.12, 0.001, 0.99],
-    omk=[0.0, -0.3, 0.3],
-    mnu=[0.06, 0.0, 5.0],
-    nnu=[3.046, 0.05, 10.0], # [3.1, 3.046, 10.0] with meffsterile
-    YHe=[0.25, 0.1, 0.5],
-    meffsterile=[0.0, 0.1, 3.0],
-    tau=[0.06, 0.01, 0.8],
-    Alens=[1.0, 0.0, 10.0],
-    w=[-1.0, -3.0, 1.0],
-    wa=[0.0, -3.0, 2.0],
-    As=[2e-9, 5e-10, 5e-9],
-    ns=[0.96, 0.8, 1.2],
-    nrun=[0.0, -1.0, 1.0],
-    nrunrun=[0.0, -1.0, 1.0],
-    r=[0.01, 0.0, 3.0],
 )
 
 

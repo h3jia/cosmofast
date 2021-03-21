@@ -83,7 +83,7 @@ class Smica(ModuleBase):
     @property
     def m_name(self):
         if self._m_name is None:
-            return 'm-Smica-CMB-Marged' if self.cmb_marged else 'm-Smica'
+            return 'm_smica_cmb_marged' if self.cmb_marged else 'm_smica'
         else:
             return self._m_name
 
@@ -108,7 +108,7 @@ class Smica(ModuleBase):
     @property
     def logp_name(self):
         if self._logp_name is None:
-            return 'logp-Smica-CMB-Marged' if self.cmb_marged else 'logp-Smica'
+            return 'logp_smica_cmb_marged' if self.cmb_marged else 'logp_smica'
         else:
             return self._logp_name
 
@@ -177,6 +177,13 @@ class Smica(ModuleBase):
             _get_binned_cls(raw_cl, lens, cmb, foo['F'], foo['n_cmb'],
                             foo['l_min'], foo['l_max'], foo['n_bin'])
             return np.concatenate((lens, cmb))
+
+    @property
+    def camb_output_shapes(self):
+        if self.cmb_marged:
+            return [foo_cmb_marged['n_bin']]
+        else:
+            return [foo['n_bin'] * 2]
 
     def _fun(self, m, ap=1.):
         out_f = np.empty(1)
