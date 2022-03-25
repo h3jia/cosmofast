@@ -2,12 +2,43 @@ from .input import CInputBase
 from .calc import CCalcBase
 from bayesfast import ModuleBase
 from bayesfast.utils.collections import PropertyList
+from bayesfast.utils.sobol import multivariate_normal
 from collections import OrderedDict
 from itertools import chain
 import numpy as np
 import camb
+import warnings
 
 __all__ = ['CAMB']
+
+
+_default_init = OrderedDict(
+    H0=[67.0, 20.0, 100.0],
+    ombh2=[0.022, 0.005, 0.1],
+    omch2=[0.12, 0.001, 0.99],
+    omk=[0.0, -0.3, 0.3],
+    mnu=[0.06, 0.0, 5.0],
+    nnu=[3.046, 0.05, 10.0],
+    nnusterile=[3.1, 3.046, 10.0], # when meffsterile is used
+    YHe=[0.25, 0.1, 0.5],
+    meffsterile=[0.1, 0.0, 3.0],
+    tau=[0.06, 0.01, 0.8],
+    Alens=[1.0, 0.0, 10.0],
+    w=[-1.0, -3.0, 1.0],
+    wa=[0.0, -3.0, 2.0],
+    As=[2e-9, 5e-10, 5e-9],
+    ns=[0.96, 0.8, 1.2],
+    nrun=[0.0, -1.0, 1.0],
+    nrunrun=[0.0, -1.0, 1.0],
+    r=[0.01, 0.0, 3.0],
+)
+
+
+def _in_bound(x, bound):
+    xt = np.atleast_2d(x).T
+    return np.product([np.where(xi>bound[i,0], True, False) * 
+                       np.where(xi<bound[i,1], True, False) for i, xi in 
+                       enumerate(xt)], axis=0).astype(bool)
 
 
 class CAMB(ModuleBase):
@@ -100,8 +131,10 @@ class CAMB(ModuleBase):
             ov = list(chain(*[list(m.camb_output_vars) for m in modules]))
             assert all([callable(m.camb_get_output) for m in modules])
             go = self.multi_output([m.camb_get_output for m in modules])
+            os = list(chain(*[list(m.camb_output_shapes) for m in modules]))
             self.output_vars = ov
             self.get_output = go
+            self.output_shapes = os
         except Exception:
             raise ValueError('failed to set output for the modules you give.')
 
@@ -139,3 +172,82 @@ class CAMB(ModuleBase):
         for calc in self.c_calc:
             calc(data, tmp_dict)
         return self.get_output(tmp_dict)
+
+    def default_input_scales(self, warn_not_found=True, a_planck=True):
+        input_scales = []
+        for i in self.input_vars:
+            if i == 'nnu' and 'meffsterile' in self.input_vars:
+                input_scales.append(_default_init['nnusterile'][1:3])
+            elif i in _default_init:
+                input_scales.append(_default_init[i][1:3])
+            else:
+                if warn_not_found:
+                    warnings.warn('does not find default input info for '
+                                  '{}.'.format(i), RuntimeWarning)
+                input_scales.append([0, 1])
+        if a_planck:
+            input_scales.append([1, 1 + 0.0025])
+        return np.array(input_scales)
+
+    def default_hard_bounds(self, warn_not_found=True, a_planck=True):
+        hard_bounds = []
+        for i in self.input_vars:
+            if i in _default_init:
+                hard_bounds.append(True)
+            else:
+                if warn_not_found:
+                    warnings.warn('does not find default input info for '
+                                  '{}.'.format(i), RuntimeWarning)
+                hard_bounds.append(False)
+        if a_planck:
+            hard_bounds.append(False)
+        return np.array(hard_bounds)
+
+    def default_x_0(self, n=100, warn_not_found=True, a_planck=True,
+                    scale_factor=1000.):
+        try:
+            n = int(n)
+            assert n > 0
+        except Exception:
+            raise ValueError('invalid value for n.')
+        try:
+            scale_factor = float(scale_factor)
+            assert scale_factor > 0
+        except Exception:
+            raise ValueError('invalid value for scale_factor.')
+
+        dis = self.default_input_scales(False, False)
+        dhb = self.default_hard_bounds(False, False)
+        sig = (dis[:, 1] - dis[:, 0]) / scale_factor
+        x_center = np.empty(0)
+
+        for i in self.input_vars:
+            if i == 'nnu' and 'meffsterile' in self.input_vars:
+                x_center = np.append(x_center, _default_init['nnusterile'][0])
+            elif i in _default_init:
+                x_center = np.append(x_center, _default_init[i][0])
+            else:
+                if warn_not_found:
+                    warnings.warn('does not find default input info for '
+                                  '{}.'.format(i), RuntimeWarning)
+                x_center = np.append(x_center, 0.5)
+
+        x_0_all = np.empty((0, dhb.shape[0]))
+        n_mvn = int(1.5 * n)
+        skip_mvn = 1
+        while True:
+            x_0 = multivariate_normal(x_center, np.diag(sig**2), n_mvn,
+                                      skip_mvn)
+            skip_mvn = skip_mvn + n_mvn
+            x_0 = x_0[_in_bound(x_0, dis)]
+            if x_0.shape[0] == 0:
+                raise RuntimeError('no x_0 in this batch is inside the '
+                                   'boundary. Plese check your settings.')
+            x_0_all = np.concatenate((x_0_all, x_0), axis=0)
+            if x_0_all.shape[0] >= n:
+                break
+
+        x_0_all = x_0_all[:n]
+        if a_planck:
+            x_0_all = np.hstack((x_0_all, np.ones((n, 1))))
+        return x_0_all

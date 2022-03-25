@@ -75,7 +75,7 @@ class PlikLite(ModuleBase):
     @property
     def m_name(self):
         if self._m_name is None:
-            return self.kind + '-PlikLite'
+            return self.kind.lower() + '_plik_lite'
         else:
             return self._m_name
 
@@ -100,7 +100,7 @@ class PlikLite(ModuleBase):
     @property
     def logp_name(self):
         if self._logp_name is None:
-            return 'logp-PlikLite-' + self.kind
+            return 'logp_plik_lite_' + self.kind.lower()
         else:
             return self._logp_name
 
@@ -171,6 +171,18 @@ class PlikLite(ModuleBase):
                 foo_ttteee['width_e'], foo_ttteee['n_bin_e'])
             b_ttteee = b_ttteee @ foo_ttteee['cov_inv_low']
             return b_ttteee
+
+        else:
+            raise RuntimeError('unexpected value for self.kind.')
+
+    @property
+    def camb_output_shapes(self):
+        if self.kind == 'TT':
+            return [foo_tt['n_bin']]
+        elif self.kind == 'TTTEEE':
+            return [foo_ttteee['n_bin']]
+        else:
+            raise RuntimeError('unexpected value for self.kind.')
 
     def _fun(self, m, ap):
         out_f = np.empty(1)

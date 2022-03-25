@@ -7,7 +7,6 @@ import camb
 __all__ = ['CInputBase', 'CInput']
 
 # TODO: add consistency module to allow different parameterization
-# TODO: implement convenience utilities for initial points and priors
 
 
 _default_input = OrderedDict(
@@ -28,27 +27,6 @@ _default_input = OrderedDict(
     nrun=0.0,
     nrunrun=0.0,
     r=0.0,
-)
-
-
-_default_init = OrderedDict(
-    H0=[67.0, 20.0, 100.0],
-    ombh2=[0.022, 0.005, 0.1],
-    omch2=[0.12, 0.001, 0.99],
-    omk=[0.0, -0.3, 0.3],
-    mnu=[0.06, 0.0, 5.0],
-    nnu=[3.046, 0.05, 10.0], # [3.1, 3.046, 10.0] with meffsterile
-    YHe=[0.25, 0.1, 0.5],
-    meffsterile=[0.0, 0.1, 3.0],
-    tau=[0.06, 0.01, 0.8],
-    Alens=[1.0, 0.0, 10.0],
-    w=[-1.0, -3.0, 1.0],
-    wa=[0.0, -3.0, 2.0],
-    As=[2e-9, 5e-10, 5e-9],
-    ns=[0.96, 0.8, 1.2],
-    nrun=[0.0, -1.0, 1.0],
-    nrunrun=[0.0, -1.0, 1.0],
-    r=[0.01, 0.0, 3.0],
 )
 
 
@@ -81,10 +59,11 @@ class CInputBase:
 
 class CInput(CInputBase):
     '''Default CAMB input model.'''
-    def __init__(self, input_vars, fixed_vars={}, get_output=None):
+    def __init__(self, input_vars, fixed_vars={}, get_output=None, kwargs=None):
         self.input_vars = input_vars
         self.fixed_vars = fixed_vars
         self.get_output = get_output
+        self.kwargs = kwargs
 
     @property
     def input_vars(self):
@@ -123,6 +102,20 @@ class CInput(CInputBase):
     def get_output(self, p):
         self._get_output = p if callable(p) else (lambda params, x: params)
 
+    @property
+    def kwargs(self):
+        return self._kwargs
+
+    @kwargs.setter
+    def kwargs(self, k):
+        if k is None:
+            self._kwargs = {}
+        else:
+            try:
+                self._kwargs = dict(k)
+            except Exception:
+                raise ValueError('invalid value for kwargs.')
+
     def get(self, x):
         try:
             x = np.atleast_1d(x)
@@ -134,7 +127,7 @@ class CInput(CInputBase):
         for i, iv in enumerate(self.input_vars):
             input_dict[iv] = x[i]
 
-        params = camb.CAMBparams()
+        params = camb.CAMBparams(**self.kwargs)
         params.set_cosmology(**_get_subdict(input_dict, _set_cosmology_keys))
         _dark_energy_model = 'fluid' if input_dict['wa'] == 0. else 'ppf'
         params.set_dark_energy(dark_energy_model=_dark_energy_model,

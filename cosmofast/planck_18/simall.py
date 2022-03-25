@@ -64,7 +64,7 @@ class Simall(ModuleBase):
     @property
     def m_name(self):
         if self._m_name is None:
-            return self.kind + '-Simall'
+            return self.kind.lower() + '_simall'
         else:
             return self._m_name
 
@@ -89,7 +89,7 @@ class Simall(ModuleBase):
     @property
     def logp_name(self):
         if self._logp_name is None:
-            return 'logp-Simall-' + self.kind
+            return 'logp_simall_' + self.kind.lower()
         else:
             return self._logp_name
 
@@ -125,6 +125,10 @@ class Simall(ModuleBase):
         except Exception:
             raise ValueError('invalid shape for raw_cl.')
         return raw_cl[2:30]
+
+    @property
+    def camb_output_shapes(self):
+        return [28]
 
     def _fun(self, m, ap):
         out_f = np.empty(1)

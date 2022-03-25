@@ -17,8 +17,8 @@ offset = foo['offset']
 
 class Commander(ModuleBase):
     """Planck 2018 Commander low-l TT likelihood."""
-    def __init__(self, tt_name='TT', m_name='TT-Commander', ap_name='a_planck',
-                 logp_name='logp-Commander', delete_vars=[], label=None):
+    def __init__(self, tt_name='TT', m_name='tt_commander', ap_name='a_planck',
+                 logp_name='logp_commander', delete_vars=[], label=None):
         super().__init__(delete_vars=delete_vars, input_shapes=None,
                          output_shapes=None, label=label)
         self.tt_name = tt_name
@@ -90,6 +90,10 @@ class Commander(ModuleBase):
         except Exception:
             raise ValueError('invalid shapr for raw_cl.')
         return raw_cl[2:30]
+
+    @property
+    def camb_output_shapes(self):
+        return [28]
 
     def _fun(self, m, ap):
         out_f = np.empty(1)
