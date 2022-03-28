@@ -1,114 +1,42 @@
 import numpy as np
-from bayesfast import ModuleBase
-from ._commander import _commander_f, _commander_j, _commander_fj
+import jax.numpy as jnp
+from jax import jit
+from jax.lax import cond
 import os
 
-__all__ = ['Commander']
+__all__ = ['commander']
 
 
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
-foo = np.load(os.path.join(CURRENT_PATH, 'data/commander.npz'))
-cl2x = foo['cl2x']
-mu = foo['mu']
-cov = foo['cov']
-cov_inv = np.linalg.inv(cov)
-offset = foo['offset']
+f = jnp.load(os.path.join(CURRENT_PATH, 'data/commander.npz'))
+cl2x = jnp.asarray(f['cl2x'])
+mu = jnp.asarray(f['mu'])
+cov_inv = jnp.asarray(np.linalg.inv(f['cov']))
+offset = jnp.asarray(f['offset'])
+
+l_min = 2
+l_max = 29
+n_b = 1000
 
 
-class Commander(ModuleBase):
-    """Planck 2018 Commander low-l TT likelihood."""
-    def __init__(self, tt_name='TT', m_name='tt_commander', ap_name='a_planck',
-                 logp_name='logp_commander', delete_vars=[], label=None):
-        super().__init__(delete_vars=delete_vars, input_shapes=None,
-                         output_shapes=None, label=label)
-        self.tt_name = tt_name
-        self.m_name = m_name
-        self.ap_name = ap_name
-        self.logp_name = logp_name
-
-    @property
-    def tt_name(self):
-        return self._tt_name
-
-    @tt_name.setter
-    def tt_name(self, ttn):
-        if isinstance(ttn, str):
-            self._tt_name = ttn
-        else:
-            raise ValueError('invalid value for tt_name.')
-
-    @property
-    def m_name(self):
-        return self._m_name
-
-    @m_name.setter
-    def m_name(self, mn):
-        if isinstance(mn, str):
-            self._m_name = mn
-        else:
-            raise ValueError('invalid value for m_name.')
-
-    @property
-    def ap_name(self):
-        return self._ap_name
-
-    @ap_name.setter
-    def ap_name(self, apn):
-        if isinstance(apn, str):
-            self._ap_name = apn
-        else:
-            raise ValueError('invalid value for ap_name.')
-
-    @property
-    def logp_name(self):
-        return self._logp_name
-
-    @logp_name.setter
-    def logp_name(self, ln):
-        if isinstance(ln, str):
-            self._logp_name = ln
-        else:
-            raise ValueError('invalid value for logp_name.')
-
-    @property
-    def input_vars(self):
-        return [self.m_name, self.ap_name]
-
-    @property
-    def output_vars(self):
-        return [self.logp_name]
-
-    @property
-    def camb_output_vars(self):
-        return [self.m_name]
-
-    def camb_get_output(self, tmp_dict):
-        raw_cl = tmp_dict[self.tt_name]
-        try:
-            assert raw_cl.ndim == 1
-            assert raw_cl.size >= 30
-        except Exception:
-            raise ValueError('invalid shapr for raw_cl.')
-        return raw_cl[2:30]
-
-    @property
-    def camb_output_shapes(self):
-        return [28]
-
-    def _fun(self, m, ap):
-        out_f = np.empty(1)
-        _commander_f(m, ap, out_f, cl2x, mu, cov_inv)
-        out_f -= offset
-        return out_f
-
-    def _jac(self, m, ap):
-        out_j = np.empty((1, 29))
-        _commander_j(m, ap, out_j, cl2x, mu, cov_inv)
-        return out_j
-
-    def _fun_and_jac(self, m, ap):
-        out_f = np.empty(1)
-        out_j = np.empty((1, 29))
-        _commander_fj(m, ap, out_f, out_j, cl2x, mu, cov_inv)
-        out_f -= offset
-        return out_f, out_j
+@jit
+def commander(cl, ap):
+    ap2 = ap**2
+    out = 0.
+    y0 = -mu
+    for i in range(l_min, l_max + 1):
+        power = cl[i - l_min] * i * (i + 1) / 2. / jnp.pi / ap2
+        j = jnp.searchsorted(cl2x[i - l_min, 0], power, side='right').astype(int) - 1
+        h = cl2x[i - l_min, 0, j + 1] - cl2x[i - l_min, 0, j]
+        a = (cl2x[i - l_min, 0, j + 1] - power) / h
+        b = (power - cl2x[i - l_min, 0, j]) / h
+        ya = cl2x[i - l_min, 1, j]
+        yb = cl2x[i - l_min, 1, j + 1]
+        y2a = cl2x[i - l_min, 2, j]
+        y2b = cl2x[i - l_min, 2, j + 1]
+        y0 = y0.at[i - l_min].add(a * ya + b * yb +
+                                  h**2 / 6. * ((a**3 - a) * y2a + (b**3 - b) * y2b))
+        y1 = (yb - ya) / h + (y2b * (3 * b**2 - 1) - y2a * (3 * a**2 - 1)) * h / 6.
+        out += cond(jnp.logical_and(j >= 0, j < n_b - 1), lambda: jnp.log(y1), lambda: jnp.nan)
+    out -= 0.5 * y0 @ cov_inv @ y0
+    return out - offset
