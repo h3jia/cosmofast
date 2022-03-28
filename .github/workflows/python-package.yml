@@ -5,9 +5,9 @@ name: python package
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.6, 3.7, 3.8]
+        python-version: ['3.7', '3.8', '3.9', '3.10']
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
@@ -38,10 +38,10 @@ jobs:
         ln -s /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
         gcc --version
         gfortran --version
-    - name: install bayesfast and cosmofast
+    - name: install cosmofast # and bayesfast
       run: |
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pip install git+https://github.com/HerculesJack/bayesfast.git@dev
+        # pip install git+https://github.com/HerculesJack/bayesfast.git@dev
         pip install -e .
     - name: lint with flake8
       run: |

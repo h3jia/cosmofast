@@ -6,11 +6,13 @@
 ![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/cosmofast)
 [![Documentation Status](https://readthedocs.org/projects/cosmofast/badge/?version=latest)](https://cosmofast.readthedocs.io/en/latest/?badge=latest)
 
-CosmoFast is an add-on package for
-[BayesFast](https://github.com/HerculesJack/bayesfast)
-developed by [He Jia](http://hejia.io) and 
-[Uros Seljak](https://physics.berkeley.edu/people/faculty/uros-seljak),
-which provides several frequently-used cosmological modules.
+CosmoFast is a collection of differentiable cosmological modules, developed by
+[He Jia](http://hejia.io) and
+[Uros Seljak](https://physics.berkeley.edu/people/faculty/uros-seljak).
+It is intended as an add-on package for [BayesFast](https://github.com/HerculesJack/bayesfast), but
+can also be used standalone.
+Feel free to contact [He Jia](mailto:he.jia.phy@gmail.com) if you would like to add your own modules
+to CosmoFast!
 
 ## Links
 
@@ -19,11 +21,15 @@ which provides several frequently-used cosmological modules.
 * Source Code: https://github.com/HerculesJack/cosmofast
 * Bug Reports: https://github.com/HerculesJack/cosmofast/issues
 
+## What's New
+
+We are upgrading BayesFast & CosmoFast to v0.2 with JAX, which would be faster, more accueate, and
+much easier to use than the previous version!
+
 ## Installation
 
-We plan to add pypi and conda-forge support later. For now, please first install
-[BayesFast](https://github.com/HerculesJack/bayesfast),
-and then install CosmoFast from source with:
+We plan to add pypi and conda-forge support later.
+For now, please install CosmoFast from source with:
 
 ```
 git clone https://github.com/HerculesJack/cosmofast
@@ -36,13 +42,21 @@ pip install -e .
 To check if CosmoFast is built correctly, you can do:
 
 ```
-pytest # for this you will need to have pytest and numdifftools installed
+pytest # for this you will need to have pytest installed
 ```
 
 ## Dependencies
 
-CosmoFast requires python>=3.6, astropy, bayesfast, camb, cython, numpy and
-scipy. Currently, it has been tested on Ubuntu and MacOS, with python 3.6-3.8.
+CosmoFast requires python>=3.7, cython, extension-helpers, jax>=0.3, jaxlib>=0.3 and numpy>=1.17.
+Currently, it has been tested on Ubuntu and MacOS, with python 3.7-3.10.
+
+## Available Modules
+
+* Planck 2018 likelihoods `cosmofast.planck_18`: Plik Lite high-l TT & TTTEEE, Commander low-l TT,
+Simall low-l EE & BB, Smica lensing full & CMB marginalized. All of these likelihoods are rewritten
+using JAX. Some of them are diagonalized for better performance with BayesFast.
+* Dark Energy Survey Y1 3x2 likelihood `cosmofast.des_y1`: coming soon.
+* Pantheon 2022 likelihood `cosmofast.pantheon_22`: coming soon.
 
 ## License
 
@@ -50,8 +64,7 @@ CosmoFast is distributed under the Apache License, Version 2.0.
 
 ## Citing CosmoFast
 
-If you find CosmoFast useful for your research,
-please consider citing our papers accordingly:
+If you find CosmoFast useful for your research, please consider citing our papers accordingly:
 
 * He Jia and Uros Seljak,
 *BayesFast: A Fast and Scalable Method for Cosmological Bayesian Inference*,
