@@ -8,22 +8,10 @@ from os import path
 
 ext_modules = [
     Extension(
-        "cosmofast.planck_18._commander",
-        ["cosmofast/planck_18/_commander.pyx"],
-        include_dirs=[np.get_include()],
-        libraries=["m"],
-    ),
-    Extension(
         "cosmofast.planck_18._plik_lite",
         ["cosmofast/planck_18/_plik_lite.pyx"],
         # include_dirs=[np.get_include()],
         # libraries=["m"],
-    ),
-    Extension(
-        "cosmofast.planck_18._simall",
-        ["cosmofast/planck_18/_simall.pyx"],
-        include_dirs=[np.get_include()],
-        libraries=["m"],
     ),
     Extension(
         "cosmofast.planck_18._smica",
@@ -80,7 +68,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name='cosmofast',
     # version='0.1.0.dev2',
-    version='0.1.0.dev2+' + git_version()[:7],
+    version='0.2.0.dev1+' + git_version()[:7],
     author='He Jia and Uros Seljak',
     maintainer='He Jia',
     maintainer_email='he.jia.phy@gmail.com',
@@ -89,9 +77,8 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/HerculesJack/cosmofast',
     license='Apache License, Version 2.0',
-    python_requires=">=3.6",
-    install_requires=['astropy', 'bayesfast', 'camb', 'cython',
-                      'extension-helpers', 'numpy', 'scipy'],
+    python_requires=">=3.7",
+    install_requires=['cython', 'extension-helpers', 'jax>=0.3', 'jaxlib>=0.3', 'numpy>=1.17'],
     packages=find_packages(),
     package_data={'cosmofast': ['*/*.npz', '*/*/*.npz']},
     # https://github.com/pypa/setuptools/issues/1806
