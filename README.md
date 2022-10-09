@@ -1,7 +1,7 @@
 # CosmoFast
 
-![python package](https://github.com/HerculesJack/cosmofast/workflows/python%20package/badge.svg)
-[![codecov](https://codecov.io/gh/HerculesJack/cosmofast/branch/master/graph/badge.svg)](https://codecov.io/gh/HerculesJack/cosmofast)
+![python package](https://github.com/h3jia/cosmofast/workflows/python%20package/badge.svg)
+[![codecov](https://codecov.io/gh/h3jia/cosmofast/branch/master/graph/badge.svg)](https://codecov.io/gh/h3jia/cosmofast)
 ![PyPI](https://img.shields.io/pypi/v/cosmofast)
 ![Conda (channel only)](https://img.shields.io/conda/vn/conda-forge/cosmofast)
 [![Documentation Status](https://readthedocs.org/projects/cosmofast/badge/?version=latest)](https://cosmofast.readthedocs.io/en/latest/?badge=latest)
@@ -9,8 +9,8 @@
 CosmoFast is a collection of differentiable cosmological modules, developed by
 [He Jia](http://hejia.io) and
 [Uros Seljak](https://physics.berkeley.edu/people/faculty/uros-seljak).
-It is intended as an add-on package for [BayesFast](https://github.com/HerculesJack/bayesfast), but
-can also be used standalone.
+It is intended as an add-on package for [BayesFast](https://github.com/h3jia/bayesfast), but can
+also be used standalone.
 Feel free to contact [He Jia](mailto:he.jia.phy@gmail.com) if you would like to add your own modules
 to CosmoFast!
 
@@ -18,8 +18,8 @@ to CosmoFast!
 
 * BayesFast Website: https://www.bayesfast.org/
 * Documentation: https://cosmofast.readthedocs.io/en/latest/
-* Source Code: https://github.com/HerculesJack/cosmofast
-* Bug Reports: https://github.com/HerculesJack/cosmofast/issues
+* Source Code: https://github.com/h3jia/cosmofast
+* Bug Reports: https://github.com/h3jia/cosmofast/issues
 
 ## What's New
 
@@ -32,7 +32,7 @@ We plan to add pypi and conda-forge support later.
 For now, please install CosmoFast from source with:
 
 ```
-git clone https://github.com/HerculesJack/cosmofast
+git clone https://github.com/h3jia/cosmofast
 cd cosmofast
 pip install -e .
 # you can drop the -e option if you don't want to use editable mode
