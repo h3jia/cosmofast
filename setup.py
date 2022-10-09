@@ -75,7 +75,7 @@ setup(
     description='Cosmology add-ons for the BayesFast package.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/HerculesJack/cosmofast',
+    url='https://github.com/h3jia/cosmofast',
     license='Apache License, Version 2.0',
     python_requires=">=3.7",
     install_requires=['cython', 'extension-helpers', 'jax>=0.3', 'jaxlib>=0.3', 'numpy>=1.17'],

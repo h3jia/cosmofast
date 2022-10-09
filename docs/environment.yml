@@ -5,6 +5,6 @@ dependencies:
   - camb
   - m2r2
   - pip
-  - pip:
-    - "git+https://github.com/HerculesJack/bayesfast.git@dev"
-    - "../"
+#  - pip:
+#    - "git+https://github.com/HerculesJack/bayesfast.git@dev"
+#    - "../"
